@@ -2,55 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <!-- Important for mobile phones -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Vignayaka Chavithi</title>
 
   <style>
-    * {
-      box-sizing: border-box;
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --gold-1: #f6d879;
+      --gold-2: #e0a92e;
+      --maroon: #5a1a0b;
+      --cream: #fff7e6;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       padding: 0;
-      background: #000;
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--cream);
+      background: #1a0d05;
+      overflow-x: hidden;
     }
 
-    .gallery {
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
+    /* ---------- Scroll container with snap ---------- */
+    .scroller {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
     }
 
-    .gallery img {
-      display: block;
+    .panel {
+      position: relative;
+      min-height: 100vh;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* ---------- Panel 1 : hero ---------- */
+    .hero {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(246,216,121,.35), transparent 60%),
+        linear-gradient(160deg, #3a1403 0%, #1a0d05 100%);
+    }
+
+    .frame {
+      position: relative;
       width: 100%;
-      height: auto;
-      margin: 0;
-      padding: 0;
+      max-width: 620px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,.8),
+                  0 0 0 1px rgba(246,216,121,.35),
+                  0 0 40px rgba(224,169,46,.25);
+    }
+
+    .frame img { display: block; width: 100%; height: auto; }
+
+    /* soft glow that breathes behind the poster */
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 70vmin;
+      height: 70vmin;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(246,216,121,.4), transparent 70%);
+      filter: blur(40px);
+      animation: breathe 5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1);   opacity: .55; }
+      50%      { transform: scale(1.15); opacity: .85; }
+    }
+
+    /* ---------- Panel 2 : schedule ---------- */
+    .schedule {
+      background:
+        radial-gradient(circle at 50% 100%, rgba(224,169,46,.25), transparent 60%),
+        linear-gradient(200deg, #2a1a08 0%, #1a0d05 100%);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 760px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,.8),
+                  0 0 0 1px rgba(246,216,121,.3);
+    }
+
+    .card img { display: block; width: 100%; height: auto; }
+
+    /* ---------- Entrance animations ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px) scale(.96);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* first poster gets a gentle zoom-in on load */
+    .hero .frame {
+      animation: introZoom 1.4s cubic-bezier(.2,.7,.2,1) both;
+    }
+    @keyframes introZoom {
+      from { opacity: 0; transform: scale(.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ---------- Scroll cue ---------- */
+    .cue {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-1);
+      opacity: .9;
+      animation: bob 1.8s ease-in-out infinite;
+      user-select: none;
+    }
+    .cue svg { width: 26px; height: 26px; }
+
+    @keyframes bob {
+      0%, 100% { transform: translate(-50%, 0); }
+      50%      { transform: translate(-50%, 10px); }
+    }
+
+    .cue.hide { opacity: 0; pointer-events: none; transition: opacity .4s; }
+
+    /* ---------- Progress bar ---------- */
+    .progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+      z-index: 10;
+      transition: width .15s linear;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
 
 <body>
 
-  <main class="gallery">
+  <div class="progress" id="progress"></div>
 
-    <!-- First image -->
-    <img src="image1.jpeg" alt="Vignayaka Chavithi - Image 1">
+  <div class="scroller" id="scroller">
 
-    <!-- Second image -->
-    <img src="image2.jpeg" alt="Vignayaka Chavithi - Image 2">
+    <!-- Panel 1 : invitation poster -->
+    <section class="panel hero">
+      <div class="frame">
+        <img src="image1.jpeg" alt="Sri Bala Vighneshwara Seva Samithi - Vinayaka Chavithi">
+      </div>
 
-  </main>
+      <div class="cue" id="cue">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Panel 2 : programme schedule -->
+    <section class="panel schedule">
+      <div class="card reveal" id="card2">
+        <img src="image2.jpeg" alt="Vinayaka Chavithi programme schedule">
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const scroller = document.getElementById('scroller');
+    const progress = document.getElementById('progress');
+    const cue = document.getElementById('cue');
+
+    // Reveal-on-scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in');
+      });
+    }, { threshold: 0.25 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Progress bar + hide scroll cue after leaving the first panel
+    scroller.addEventListener('scroll', () => {
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      const pct = max > 0 ? (scroller.scrollTop / max) * 100 : 0;
+      progress.style.width = pct + '%';
+      cue.classList.toggle('hide', scroller.scrollTop > 40);
+    }, { passive: true });
+
+    // Tap the cue to glide to the schedule
+    cue.addEventListener('click', () => {
+      document.querySelector('.schedule').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
 
 </body>
 </html>
