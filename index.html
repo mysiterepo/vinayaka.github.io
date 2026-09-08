@@ -20,7 +20,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: "Segoe UI", "Noto Sans Telugu", Arial, sans-serif;
       color: var(--cream);
       background: #1a0d05;
       overflow-x: hidden;
@@ -30,7 +30,7 @@
     .scroller {
       height: 100vh;
       overflow-y: scroll;
-      scroll-snap-type: y mandatory;
+      scroll-snap-type: y proximity;
       -webkit-overflow-scrolling: touch;
     }
 
@@ -81,23 +81,239 @@
       50%      { transform: scale(1.15); opacity: .85; }
     }
 
+    /* ---------- Shared section heading ---------- */
+    .section-title {
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 34px;
+    }
+    .section-title small {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-2);
+      margin-bottom: 6px;
+    }
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(22px, 5vw, 32px);
+      color: var(--gold-1);
+      text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    }
+
     /* ---------- Panel 2 : schedule ---------- */
     .schedule {
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 72px 22px;
       background:
         radial-gradient(circle at 50% 100%, rgba(224,169,46,.25), transparent 60%),
         linear-gradient(200deg, #2a1a08 0%, #1a0d05 100%);
     }
 
-    .card {
+    .days {
       width: 100%;
-      max-width: 760px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 25px 60px -15px rgba(0,0,0,.8),
-                  0 0 0 1px rgba(246,216,121,.3);
+      max-width: 1040px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 20px;
     }
 
-    .card img { display: block; width: 100%; height: auto; }
+    .day {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 24px 20px 20px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(90,26,11,.5), rgba(26,13,5,.55));
+      border: 1px solid rgba(246,216,121,.28);
+      box-shadow: 0 18px 40px -22px rgba(0,0,0,.85), inset 0 0 24px rgba(224,169,46,.08);
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .day:hover {
+      transform: translateY(-6px);
+      border-color: rgba(246,216,121,.6);
+      box-shadow: 0 26px 50px -20px rgba(0,0,0,.9), 0 0 26px rgba(224,169,46,.22);
+    }
+    .day::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+    }
+
+    .day-top { display: flex; align-items: center; gap: 14px; }
+
+    .date-badge {
+      flex: none;
+      width: 60px; height: 60px;
+      border-radius: 14px;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      background: radial-gradient(circle at 30% 25%, var(--gold-1), var(--gold-2));
+      color: var(--maroon);
+      box-shadow: 0 0 18px rgba(246,216,121,.4);
+    }
+    .date-badge .d { font-size: 23px; font-weight: 800; line-height: 1; }
+    .date-badge .m { font-size: 10px; font-weight: 700; margin-top: 3px; }
+
+    .day-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .day-meta .weekday {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      color: var(--gold-2);
+    }
+    .day-meta .emoji { font-size: 20px; line-height: 1; }
+
+    .day-event {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--gold-1);
+    }
+
+    .day-time {
+      margin-top: auto;
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cream);
+      background: rgba(246,216,121,.12);
+      border: 1px solid rgba(246,216,121,.3);
+    }
+    .day-time svg { width: 14px; height: 14px; color: var(--gold-1); flex: none; }
+
+    .blessing {
+      width: 100%;
+      max-width: 720px;
+      margin: 42px auto 0;
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--cream);
+      opacity: .92;
+    }
+    .blessing .morya {
+      display: block;
+      margin-top: 12px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--gold-1);
+    }
+
+    /* ---------- Panel 3 : venue / address ---------- */
+    .venue {
+      flex-direction: column;
+      gap: 26px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(246,216,121,.28), transparent 60%),
+        linear-gradient(160deg, #3a1403 0%, #1a0d05 100%);
+    }
+
+    .venue-heading {
+      text-align: center;
+      line-height: 1.3;
+    }
+    .venue-heading small {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-2);
+      margin-bottom: 6px;
+    }
+    .venue-heading h2 {
+      margin: 0;
+      font-size: clamp(24px, 5vw, 34px);
+      color: var(--gold-1);
+      text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    }
+
+    .address-card {
+      width: 100%;
+      max-width: 620px;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(90,26,11,.55), rgba(26,13,5,.55));
+      border: 1px solid rgba(246,216,121,.35);
+      box-shadow: 0 20px 50px -20px rgba(0,0,0,.8), inset 0 0 30px rgba(224,169,46,.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .pin {
+      width: 46px; height: 46px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--gold-1), var(--gold-2));
+      color: var(--maroon);
+      box-shadow: 0 0 20px rgba(246,216,121,.5);
+    }
+    .pin svg { width: 24px; height: 24px; }
+
+    .address-card p { margin: 0; }
+    .address-card .place {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold-1);
+      margin-bottom: 4px;
+    }
+    .address-card .lines {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--cream);
+      opacity: .92;
+    }
+
+    .directions-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-decoration: none;
+      color: var(--maroon);
+      background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+      box-shadow: 0 8px 20px -6px rgba(224,169,46,.6);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .directions-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px -6px rgba(224,169,46,.75);
+    }
+    .directions-btn svg { width: 16px; height: 16px; }
+
+    .map-wrap {
+      width: 100%;
+      max-width: 620px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(246,216,121,.35);
+      box-shadow: 0 20px 50px -20px rgba(0,0,0,.8);
+      aspect-ratio: 16 / 10;
+      background: #000;
+    }
+    .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
 
     /* ---------- Entrance animations ---------- */
     .reveal {
@@ -109,6 +325,7 @@
       opacity: 1;
       transform: translateY(0) scale(1);
     }
+    .day.reveal { transition-delay: calc(var(--i, 0) * 55ms); }
 
     /* first poster gets a gentle zoom-in on load */
     .hero .frame {
@@ -185,12 +402,179 @@
       </div>
     </section>
 
-    <!-- Panel 2 : programme schedule -->
+    <!-- Panel 2 : programme schedule as day cards -->
     <section class="panel schedule">
-      <div class="card reveal" id="card2">
-        <img src="image2.jpeg" alt="Vinayaka Chavithi programme schedule">
+
+      <div class="section-title reveal">
+        <small>&#9670;&nbsp; 16వ వార్షికోత్సవం &nbsp;&#9670;</small>
+        <h2>శ్రీ వినాయక చవితి కార్యక్రమాలు</h2>
+      </div>
+
+      <div class="days">
+
+        <!-- Sep 14 -->
+        <article class="day reveal" style="--i:0">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">14</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">సోమవారం</span>
+              <span class="emoji">🛕</span>
+            </div>
+          </div>
+          <div class="day-event">విగ్రహ ప్రతిష్ఠ</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            7:00 AM &nbsp;&bull;&nbsp; ఉదయం
+          </div>
+        </article>
+
+        <!-- Sep 15 -->
+        <article class="day reveal" style="--i:1">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">15</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">మంగళవారం</span>
+              <span class="emoji">🌿</span>
+            </div>
+          </div>
+          <div class="day-event">గరిక పూజ</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            6:30 PM &nbsp;&bull;&nbsp; సాయంత్రం
+          </div>
+        </article>
+
+        <!-- Sep 16 -->
+        <article class="day reveal" style="--i:2">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">16</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">బుధవారం</span>
+              <span class="emoji">🪔</span>
+            </div>
+          </div>
+          <div class="day-event">పంచహారతులు / భజన కార్యక్రమం</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            7:00 PM &nbsp;&bull;&nbsp; సాయంత్రం
+          </div>
+        </article>
+
+        <!-- Sep 18 -->
+        <article class="day reveal" style="--i:3">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">18</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">శుక్రవారం</span>
+              <span class="emoji">🌺</span>
+            </div>
+          </div>
+          <div class="day-event">కుంకుమ పూజ</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            6:00 PM &nbsp;&bull;&nbsp; సాయంత్రం
+          </div>
+        </article>
+
+        <!-- Sep 19 -->
+        <article class="day reveal" style="--i:4">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">19</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">శనివారం</span>
+              <span class="emoji">🙏</span>
+            </div>
+          </div>
+          <div class="day-event">గణపతి పూజ</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            7:00 AM &nbsp;&bull;&nbsp; ఉదయం
+          </div>
+        </article>
+
+        <!-- Sep 20 -->
+        <article class="day reveal" style="--i:5">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">20</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">ఆదివారం</span>
+              <span class="emoji">🔥</span>
+            </div>
+          </div>
+          <div class="day-event">గణపతి హోమం / అన్నప్రసాదం</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            10:00 AM &nbsp;&bull;&nbsp; ఉదయం
+          </div>
+        </article>
+
+        <!-- Sep 22 -->
+        <article class="day reveal" style="--i:6">
+          <div class="day-top">
+            <div class="date-badge"><span class="d">22</span><span class="m">SEP</span></div>
+            <div class="day-meta">
+              <span class="weekday">మంగళవారం</span>
+              <span class="emoji">🚩</span>
+            </div>
+          </div>
+          <div class="day-event">ఊరేగింపు / నిమజ్జనం / లడ్డు వేలం పాట</div>
+          <div class="day-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            7:00 PM &nbsp;&bull;&nbsp; సాయంత్రం
+          </div>
+        </article>
+
+      </div>
+
+      <p class="blessing reveal">
+        అందరూ కుటుంబ సభ్యులతో కలిసి పూజల్లో పాల్గొని, శ్రీ వినాయకుని ఆశీస్సులు పొందండి.
+        <span class="morya">గణపతి బప్పా మోరియా</span>
+      </p>
+
+    </section>
+
+    <!-- Panel 3 : venue / address -->
+    <!-- ===== EDIT YOUR VENUE DETAILS HERE ===== -->
+    <section class="panel venue">
+      <div class="venue-heading reveal">
+        <small>&#9670;&nbsp; Venue &nbsp;&#9670;</small>
+      </div>
+
+      <div class="address-card reveal">
+        <span class="pin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </span>
+        <div>
+          <p class="place">Sri Bala Vighneshwara Seva Samithi</p>
+          <p class="lines">
+            Street / Colony name,<br>
+            Area, Landmark,<br>
+            City &ndash; PIN code
+          </p>
+          <a class="directions-btn"
+             href="https://www.google.com/maps/search/?api=1&amp;query=Sri+Bala+Vighneshwara+Seva+Samithi"
+             target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+            Get Directions
+          </a>
+        </div>
+      </div>
+
+      <div class="map-wrap reveal">
+        <iframe
+          src="https://www.google.com/maps?q=Sri+Bala+Vighneshwara+Seva+Samithi&amp;output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Venue location map"></iframe>
       </div>
     </section>
+    <!-- ===== END VENUE ===== -->
 
   </div>
 
@@ -204,7 +588,7 @@
       entries.forEach(e => {
         if (e.isIntersecting) e.target.classList.add('in');
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.2 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
     // Progress bar + hide scroll cue after leaving the first panel
